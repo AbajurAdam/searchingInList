@@ -76,31 +76,47 @@ kullaniciGiris = input()
 
 def girisHarflereAyir(kullaniciGiris):
     # Kullanıcıdan alınan kelime harflerine ayrılarak
-    # kullaniciHarf dizisine harf harf atanıyor.
+    # kullaniciHarfListesi dizisine harf harf atanıyor.
     global kullaniciHashToplam
+    global kullaniciHarfListesi
     kullaniciHashToplam = 0
-    kullaniciHarf = []
+    kullaniciHarfListesi = []
     quadraticCarpimSayisi = 1
     for harf in kullaniciGiris:
-        kullaniciHarf.append(harf)
+        kullaniciHarfListesi.append(harf)
         # Kullanıcı girişinin hash değeri bulunuyor.
         kullaniciHashToplam = kullaniciHashToplam + \
             (ord(harf) * quadraticCarpimSayisi)
         quadraticCarpimSayisi = quadraticCarpimSayisi + 1
     print("Aradığınız kelimenin harflerine ayrılmış hali : "
-          + str(kullaniciHarf) +
+          + str(kullaniciHarfListesi) +
           "\nAradığınız kelimenin hash değeri : "
           + str(kullaniciHashToplam))
 
 
 def listedeAra(kullaniciHashToplam):
     bulunanIndex = None
+    # Diğer programlama dillerinde de olan try-catch yöntemi ile dizide
+    # aranan kelimenin olup olmadığı kontrol ediliyor.
     try:
+        # Kelime bulunursa ekrana kaçıncı indiste bulunduğu yazdırılıyor.
         bulunanIndex = lstHashListesi.index(kullaniciHashToplam)
+        print("Kelimeniz listenin " + str(bulunanIndex) + ". elemanında.")
     except ValueError:
-        print("List does not contain value")
-    print("Kelimeniz listenin " + str(bulunanIndex) + ". elemanında.")
+        print("Aradığınız kelime girilen hali ile listede yok." +
+              "\nKelime eksiltilerek arama işlemine başlanıyor...")
+
+
+def kelimeEksiltAra(kullaniciHarfListesi):
+    for harf in kullaniciHarfListesi:
+        yeniString = None
+        try:
+            yeniString = kullaniciHarfListesi - kullaniciHarfListesi[harf]
+            print(yeniString)
+        except ValueError:
+            print("a")
 
 
 girisHarflereAyir(kullaniciGiris)
+print(kullaniciHarfListesi)
 listedeAra(kullaniciHashToplam)
