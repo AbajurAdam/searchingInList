@@ -1,6 +1,7 @@
 competition
 afford
 pull
+puller
 donkey
 faulty
 electric
@@ -73,7 +74,7 @@ wish
 smart
 uncle
 porter
-sparkling
+arka
 development
 well-off
 pleasure
@@ -93,7 +94,8 @@ spooky
 fearful
 property
 rabbit
-bat
+lola
+ked
 moon
 basket
 admit

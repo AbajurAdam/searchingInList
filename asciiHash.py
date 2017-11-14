@@ -9,7 +9,7 @@
 # ve indisleri NULL olan bir liste oluşturuluyor.
 global lstHashListesi
 lstHashListesi = []
-for i in range(0, 203):
+for i in range(0, 211):
     lstHashListesi.append(None)
 
 
@@ -58,20 +58,9 @@ def karakterListesiOlustur():
         quadraticCarpimSayisi = 1
         for harf in karakterAyir:
             # ascii numaraları bulunup toplanıyor
-            key = key + ord(harf) * quadraticCarpimSayisi
+            key = key + ord(harf) * pow(quadraticCarpimSayisi, 4)
             quadraticCarpimSayisi = quadraticCarpimSayisi + 1
         hashBul(key, len(lstHashListesi))
-
-
-# Dosya açma ve karakter listesi oluşturup
-# hash dizisine atama fonksiyonları çalıştırılıyor.
-dosyaAc()
-karakterListesiOlustur()
-print("Hash listesinin son hali : \n" + str(lstHashListesi))
-
-# Arama için kullanıcıdan giriş alınıyor.
-print("Lütfen aramak istediğiniz kelimeyi giriniz :")
-kullaniciGiris = input()
 
 
 def girisHarflereAyir(kullaniciGiris):
@@ -86,7 +75,7 @@ def girisHarflereAyir(kullaniciGiris):
         kullaniciHarfListesi.append(harf)
         # Kullanıcı girişinin hash değeri bulunuyor.
         kullaniciHashToplam = kullaniciHashToplam + \
-            (ord(harf) * quadraticCarpimSayisi)
+            (ord(harf) * pow(quadraticCarpimSayisi, 4))
         quadraticCarpimSayisi = quadraticCarpimSayisi + 1
     print("Aradığınız kelimenin harflerine ayrılmış hali : "
           + str(kullaniciHarfListesi) +
@@ -104,19 +93,55 @@ def listedeAra(kullaniciHashToplam):
         print("Kelimeniz listenin " + str(bulunanIndex) + ". elemanında.")
     except ValueError:
         print("Aradığınız kelime girilen hali ile listede yok." +
-              "\nKelime eksiltilerek arama işlemine başlanıyor...")
+              "\nHarf eksiltilerek arama işlemine başlanıyor...")
+        kelimeEksiltAra(kullaniciHarfListesi)
 
 
 def kelimeEksiltAra(kullaniciHarfListesi):
-    for harf in kullaniciHarfListesi:
-        yeniString = None
-        try:
-            yeniString = kullaniciHarfListesi - kullaniciHarfListesi[harf]
-            print(yeniString)
-        except ValueError:
-            print("a")
+    bulunanIndex = None
+    lstYeniString = []
+    a = 0
 
+    print(kullaniciHarfListesi)
+
+    for i in kullaniciHarfListesi:
+        kullaniciHashToplam = 0
+        quadraticCarpimSayisi = 1
+        lstYeniString = list(kullaniciHarfListesi)
+        lstYeniString.pop(a)
+        print("\nŞimdiki aranan kelime : " + str(lstYeniString))
+        for i in lstYeniString:
+            kullaniciHashToplam = kullaniciHashToplam + \
+                (ord(i) * pow(quadraticCarpimSayisi, 4))
+            quadraticCarpimSayisi = quadraticCarpimSayisi + 1
+
+        a = a + 1
+
+        try:
+            bulunanIndex = lstHashListesi.index(kullaniciHashToplam)
+            print("Aradığınız kelime " +
+                  str(lstYeniString) +
+                  " haliyle listenin " +
+                  str(bulunanIndex) +
+                  " index numarası ile bulunmaktadır.")
+        except ValueError:
+            print("Aradığınız kelime " + str(lstYeniString) +
+                  " haliyle dizide bulunmamaktadır.")
+
+
+# Dosya açma ve karakter listesi oluşturup
+# hash dizisine atama fonksiyonları çalıştırılıyor.
+dosyaAc()
+karakterListesiOlustur()
+
+print("Hash listesinin son hali : \n" + str(lstHashListesi))
+
+# Arama için kullanıcıdan giriş alınıyor.
+print("Lütfen aramak istediğiniz kelimeyi giriniz :")
+kullaniciGiris = input()
 
 girisHarflereAyir(kullaniciGiris)
-print(kullaniciHarfListesi)
 listedeAra(kullaniciHashToplam)
+
+# TODO: Ascii hesaplanırken 1kare 2kare 3kare değil 1 üzeri 4
+# 2üzeri 4 3üzeri 4 olarak yazılacak
