@@ -92,39 +92,75 @@ def listedeAra(kullaniciHashToplam):
         bulunanIndex = lstHashListesi.index(kullaniciHashToplam)
         print("Kelimeniz listenin " + str(bulunanIndex) + ". elemanında.")
     except ValueError:
-        print("Aradığınız kelime girilen hali ile listede yok." +
-              "\nHarf eksiltilerek arama işlemine başlanıyor...")
+        print("Aradığınız kelime girilen hali ile listede yok.")
+        # Kelime bulunamadığı için harf eksiltilerek ve harf değiştirerek
+        # arama işlemine başlanıyor.
         kelimeEksiltAra(kullaniciHarfListesi)
+        kelimeDegistirAra(kullaniciHarfListesi)
 
 
 def kelimeEksiltAra(kullaniciHarfListesi):
     bulunanIndex = None
     lstYeniString = []
     a = 0
-
-    print(kullaniciHarfListesi)
-
+    print("\nHarf eksiltilerek arama işlemine başlanıyor...")
+    print("************************************************")
+    print("\nAranacak kelimenin ilk hali : " + str(kullaniciHarfListesi))
     for i in kullaniciHarfListesi:
         kullaniciHashToplam = 0
         quadraticCarpimSayisi = 1
         lstYeniString = list(kullaniciHarfListesi)
         lstYeniString.pop(a)
         print("\nŞimdiki aranan kelime : " + str(lstYeniString))
+        # İçerisinden harfi çıkarılan yeni kelimenin hash değeri hesaplanıyor.
         for i in lstYeniString:
             kullaniciHashToplam = kullaniciHashToplam + \
                 (ord(i) * pow(quadraticCarpimSayisi, 4))
             quadraticCarpimSayisi = quadraticCarpimSayisi + 1
 
         a = a + 1
-
+        # Aranan kelimenin liste içinde kontrolü
+        # try-catch yöntemi ile yapılıyor.
         try:
             bulunanIndex = lstHashListesi.index(kullaniciHashToplam)
-            print("Aradığınız kelime " +
-                  str(lstYeniString) +
-                  " haliyle listenin " +
-                  str(bulunanIndex) +
-                  " index numarası ile bulunmaktadır.")
+            print("Aradığınız kelime " + str(lstYeniString) +
+                  " haliyle listenin " + str(bulunanIndex) +
+                  " index numarasında bulunmaktadır.")
         except ValueError:
+            print("Aradığınız kelime " + str(lstYeniString) +
+                  " haliyle dizide bulunmamaktadır.")
+
+
+def kelimeDegistirAra(kullaniciHarfListesi):
+    bulunanIndex = None
+    lstYeniString = []
+    print("\nHarf değiştirilerek arama işlemine başlanıyor...")
+    print("************************************************")
+    print("\nAranacak kelimenin ilk hali : " + str(kullaniciHarfListesi))
+    # For döngüsünü n-1 kez dönecek şekilde ayarlıyorum.
+    for item in range(0, len(kullaniciHarfListesi) - 1):
+        kullaniciHashToplam = 0
+        quadraticCarpimSayisi = 1
+        lstYeniString = list(kullaniciHarfListesi)
+        # lstYeniString[item],lstYeniString[item + 1]
+        # = lstYeniString[item + 1], lstYeniString[item]
+        # Aşağıdaki satırda listenin "i" indisinde bulunan eleman ile "i+1"
+        # insidinde bulunan eleman yer değiştirliyor.
+        lstYeniString[item], lstYeniString[item + 1] = \
+            lstYeniString[item + 1], lstYeniString[item]
+        for harf in lstYeniString:
+            kullaniciHashToplam = kullaniciHashToplam + \
+                (ord(harf) * pow(quadraticCarpimSayisi, 4))
+            quadraticCarpimSayisi = quadraticCarpimSayisi + 1
+        print("\nKelimenin [" + str(item) + "] ve [" + str(item + 1) +
+              "] indislerinin yer değiştirmiş hali : " + str(lstYeniString))
+        print("Aranan kelimenin hash değeri : " + str(kullaniciHashToplam))
+        try:
+            bulunanIndex = lstHashListesi.index(kullaniciHashToplam)
+            print("Aradığınız kelime " + str(lstYeniString) +
+                  " haliyle listenin " + str(bulunanIndex) +
+                  " index numarasında bulunmaktadır.")
+        except:
             print("Aradığınız kelime " + str(lstYeniString) +
                   " haliyle dizide bulunmamaktadır.")
 
@@ -133,15 +169,13 @@ def kelimeEksiltAra(kullaniciHarfListesi):
 # hash dizisine atama fonksiyonları çalıştırılıyor.
 dosyaAc()
 karakterListesiOlustur()
-
-print("Hash listesinin son hali : \n" + str(lstHashListesi))
-
+print("Hash listesinin son hali : \n")
+for item in range(len(lstHashListesi)):
+    print("[" + str(item) + "]=" + str(lstHashListesi[item]), end=", ")
 # Arama için kullanıcıdan giriş alınıyor.
 print("Lütfen aramak istediğiniz kelimeyi giriniz :")
 kullaniciGiris = input()
-
+# Kullanıcının girişi harflerine ayrılıyor.
 girisHarflereAyir(kullaniciGiris)
+# Listede arama fonksiyonu çalıştırılıyor.
 listedeAra(kullaniciHashToplam)
-
-# TODO: Ascii hesaplanırken 1kare 2kare 3kare değil 1 üzeri 4
-# 2üzeri 4 3üzeri 4 olarak yazılacak
